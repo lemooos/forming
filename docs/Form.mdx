@@ -1,0 +1,23 @@
+---
+name: Hello world
+---
+
+import {Props} from 'docz';
+import Form from '../src/Form/Form';
+
+# Form
+
+## Table of Props
+
+<Props of={Form} />
+
+## Given Code
+
+<Form onSubmit={(values) => console.table(values)}>
+  {({...functionChildrenProps}) => (
+    <>
+      {console.table(functionChildrenProps)}
+      <div>Hello, Forming!</div>
+    </>
+  )}
+</Form>
