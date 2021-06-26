@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import useForm from '../Form/formContext/hooks/useForm/useForm';
+import {Nullable} from '../types';
 import {FieldProps} from './types';
 
 const Field: React.FunctionComponent<FieldProps> =
@@ -16,26 +17,35 @@ const Field: React.FunctionComponent<FieldProps> =
   const inputRef = React.useRef<HTMLElement>();
 
   const [value, updateInternalValue] = React.useState<any>(initialValue);
-  // this is any 'cause we can't identify for now which
-  // type the upper-scale developer gives in his
-  // implementation. As said. For now.  \_(0_0)_/
+  // this is any 'cause we can't identify for now
+  // which type the upper-scale developer gives in
+  // his implementation. As said. For now. 
+  // \_(0_0)_ /
 
   const onKeyUp = (
-    event?: React.FormEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    event?: React.FormEvent<HTMLElement & {
+      currentTarget: Nullable<(EventTarget & {
+        value: Nullable<string>
+      })>
+    }>
   ): void => {
     if (!event) {
       return;
     }
 
-    const origin = event.currentTarget.value;
-    let target = value;
+
+    // @ts-ignore
+    const origin = event.currentTarget?.value || '';
+    let target: string = value;
 
     if (typeof format === 'function') {
       target = format(origin);
     }
 
+    // TODO Analyse and remove this ignorance with an special type.
+    // @ts-ignore
     event.currentTarget.value = target;
-    event.currentTarget.setPointerCapture
+    event.currentTarget.setPointerCapture(target.length);
   };
 
   const change = (value: any) =>
@@ -77,8 +87,8 @@ const Field: React.FunctionComponent<FieldProps> =
       {children({
         value,
         change,
-        onKeyUp,
-        ref: inputRef as React.LegacyRef<HTMLElement>,
+        onKeyUp: onKeyUp as (event?: React.FormEvent) => void,
+        ref: inputRef as React.RefObject<HTMLElement>,
       })}
     </>
   );

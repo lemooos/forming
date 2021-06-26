@@ -22,7 +22,7 @@ export type FieldChildrenFunctionAsChildComponentProps<
   /**
    *
    */
-  onKeyUp: (event?: React.FormEvent<E>) => void;
+  onKeyUp: (event?: React.FormEvent) => void;
 
   /**
    *
@@ -30,7 +30,7 @@ export type FieldChildrenFunctionAsChildComponentProps<
   ref?: React.LegacyRef<E>;
 };
 
-export type FieldProps<T = string, E extends HTMLElement = HTMLInputElement> = {
+export type FieldProps<T = string, E extends HTMLElement = HTMLElement> = {
   /**
    * The unique identifier of the field since the input
    * is rendered in DOM.
